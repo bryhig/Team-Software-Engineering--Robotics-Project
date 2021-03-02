@@ -2,7 +2,7 @@
 Team Software Engineering - Robotics G1 project
 Last Updated: 02/03/2021
 
-A software engineering project to create an efficient obstacle avoidance algorithm robot controller for the iRobot Create using the open-source Webots Robotics simulator.
+A software engineering project to create an efficient obstacle avoidance algorithm('s) robot controller for the iRobot Create using the open-source Webots Robotics simulator.
 
 Current progress:
 - All robot hardware (motors and sensors) have been initialized and configured.
