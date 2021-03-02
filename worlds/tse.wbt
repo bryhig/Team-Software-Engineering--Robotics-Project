@@ -1,10 +1,10 @@
-#VRML_SIM R2021a utf8
+#VRML_SIM R2020b utf8
 WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.03148393958250847 0.9773783628592381 0.20914181160867984 2.8202364482646023
-  position 2.0856410335804667 4.545357447411587 -6.980607482977519
+  orientation 0.014795559533545877 0.9683678070993987 0.24908810006018117 3.122258637179288
+  position -0.18647262506609047 0.6500773372048491 -1.1071280410991546
 }
 TexturedBackground {
 }
@@ -27,6 +27,8 @@ RectangleArena {
   wallHeight 0.05
 }
 Create {
+  translation -0.0957632 0.044 -0.357386
+  rotation 0 1 0 3.14159
   controller "create_go_forward"
 }
 Laptop {
