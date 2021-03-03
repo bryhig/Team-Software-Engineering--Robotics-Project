@@ -1,4 +1,4 @@
-// File: create_go_forward.cpp
+// File: vacuum_cleaning_robot_controller.cpp
 // Date: 03/03/2021
 // Description: A controller for the iRobot Create to kickstart our TSE project.
 // Author: Bryan Higgins
