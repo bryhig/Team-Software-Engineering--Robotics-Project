@@ -1,5 +1,5 @@
 // File: create_go_forward.cpp
-// Date: 02/03/2021
+// Date: 03/03/2021
 // Description: A controller for the iRobot Create to kickstart our TSE project.
 // Author: Bryan Higgins
 
@@ -15,6 +15,21 @@
 #define MAX_SPEED 6.28
 
 using namespace webots;
+
+//Obstacle detection functions that check to see if sensors are at threshold value. BH
+//collision and cliff functions work for all directions. Change function inputs for different directions. BH
+bool collision(double tsValue)
+{
+ bool collision = tsValue > 0.0;
+ return collision;
+}
+
+bool cliff(double dsValue1, double dsValue2)
+{
+ bool cliff = dsValue1 < 100.0 || dsValue2 < 100.0;
+ return cliff;
+}
+
 
 int main(int argc, char **argv) {
   
@@ -89,13 +104,13 @@ int main(int argc, char **argv) {
     psValues[i] = ps[i]->getValue();
    }
    
-   //Obstacle detection. BH
-   bool left_collision = tsValues[0] > 0.0;
-   bool right_collision = tsValues[1] > 0.0;
-   bool is_there_vitual_wall = r->getQueueLength() > 0.0;
-   bool cliff_left = dsValues[0] < 100.0 || dsValues[1] < 100.0;
-   bool cliff_right = dsValues[3] < 100.0 || dsValues[2] < 100.0;
-   bool cliff_front = dsValues[1] < 100.0 || dsValues[2] < 100.0;
+   //Obstacle detection functions called. Input parameters specify direction for collision and cliff. BH
+   bool isLeftCollision = collision(tsValues[0]);
+   bool isRightCollision = collision(tsValues[1]);
+   bool isThereWall = r->getQueueLength() > 0.0;
+   bool isCliffLeft = cliff(dsValues[0], dsValues[1]);
+   bool isCliffRight = cliff(dsValues[3], dsValues[2]);
+   bool isCliffFront = cliff(dsValues[1], dsValues[2]);
   
   //Flush IR receiver. MUST STAY AT END OF LOOP. BH.
   while (r->getQueueLength() > 0){r->nextPacket();}
