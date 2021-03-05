@@ -37,53 +37,59 @@ bool cliff(double dsValue1, double dsValue2)
  return cliff;
 }
 
-/*
+
 // Not in use now, will be usable after code is restructured.
 
-void go_forward(){
-  leftMotor->setVelocity(MAX_SPEED);
-  rightMotor->setVelocity(MAX_SPEED);
+void go_forward(Motor *left, Motor *right, double speed){
+  left->setVelocity(speed);
+  right->setVelocity(speed);
 }
 
-void go_backward(){
-  leftMotor->setVelocity(-MAX_SPEED);
-  rightMotor->setVelocity(-MAX_SPEED);
+void go_backward(Motor *left, Motor *right, double speed){
+  left->setVelocity(-speed);
+  right->setVelocity(-speed);
 }
 
-void stop(){
-  leftMotor->setVelocity(0.0);
-  rightMotor->setVelocity(0.0);
+void stop(Motor *left, Motor *right){
+  left->setVelocity(0.0);
+  right->setVelocity(0.0);
 }
 
-// Partially pulled from the webots robot, in order to test this
-void turn(double angle){
+// Partially pulled from the webots robot, rebuilt for C++. DC
+// Needs step functions in order to not crash webots. DC
+
+void turn(Motor *left, Motor *right, PositionSensor *posSensors[2], double angle){
   // Grab the current positions of the wheels (at start of turning) to apply when working out how far we've turned. DC
-  double leftOffset = ps[0]->getValue();
-  double rightOffset = ps[1]->getValue();
+  double leftOffset = posSensors[0]->getValue();
+  double rightOffset = posSensors[1]->getValue();
+  std::cout << posSensors[0]->getValue() << std::endl;
   
   // If the angle is negative, turn left, else turn right. DC
   double direction = (angle < 0) ? -1.0 : 1.0;
-  
+  std::cout << "works1" << std::endl;
   // Set the motors going - if left, set the left motor forward and right backward,
   // otherwise do the opposite. DC
-  leftMotor->setVelocity(direction * HALF_SPEED);
-  rightMotor->setVelocity(-direction * HALF_SPEED);
+  left->setVelocity(direction * HALF_SPEED);
+  right->setVelocity(-direction * HALF_SPEED);
+  std::cout << "works2" << std::endl;
   
-  //until this variable == the angle entered, keep rotating
+  //until this variable == the angle entered, keep rotating - DC
   double orientation;
-  do{
+  do {
     // Grab the current positions of the wheels, DC
-    double l = ps[0]->getValue();
-    double r = ps[1]->getValue();
+    double l = posSensors[0]->getValue() - leftOffset;
+    double r = posSensors[1]->getValue() - rightOffset;
+    std::cout << "worksL1" << std::endl;
     // Work out the distance we move based on the radius of the wheels, DC
     double dl = l * WHEEL_RADIUS;
     double dr = r * WHEEL_RADIUS;
+    std::cout << "worksL2" << std::endl;
     // work out the current orientation by shifting the circle by the distance moved. DC
     // Circle diameter = axle length. DC
     orientation = direction * (dl-dr) * AXLE_LENGTH; 
   } while(orientation < direction * angle);
 }
-*/
+
 
 int main(int argc, char **argv) {
   
@@ -159,14 +165,17 @@ int main(int argc, char **argv) {
    {
     psValues[i] = ps[i]->getValue();
    }
-  
-   // Left the actual turn code here - once the function is tested we can specify what angle etc. DC
-   leftMotor->setVelocity(1 * HALF_SPEED);
-   rightMotor->setVelocity(-1 * HALF_SPEED);
-   // Read the position sensors 
+   
+   // Read the position sensors. DC
    printf("%lf on the left, and %lf on the right\n", ps[0]->getValue(), ps[1]->getValue());
    
-   //Obstacle detection functions called. Input parameters specify direction for collision and cliff. BH
+   // Tests for each movement function. DC
+   //go_forward(leftMotor, rightMotor, MAX_SPEED);
+   go_backward(leftMotor, rightMotor, HALF_SPEED);
+   //turn(leftMotor, rightMotor, ps, 90);
+   
+   
+   // Obstacle detection functions called. Input parameters specify direction for collision and cliff. BH
    bool isLeftCollision = collision(tsValues[0]);
    bool isRightCollision = collision(tsValues[1]);
    bool isThereWall = r->getQueueLength() > 0.0;
@@ -174,7 +183,7 @@ int main(int argc, char **argv) {
    bool isCliffRight = cliff(dsValues[3], dsValues[2]);
    bool isCliffFront = cliff(dsValues[1], dsValues[2]);
   
-   //Flush IR receiver. MUST STAY AT END OF LOOP. BH.
+   // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
    while (r->getQueueLength() > 0){r->nextPacket();}
    
    
