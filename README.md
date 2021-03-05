@@ -3,7 +3,7 @@ Team Software Engineering - Robotics G1 project
 Last Updated: 05/03/2021
 
 A software engineering project to create an efficient obstacle avoidance algorithm('s) robot controller in C++ for the iRobot Create using the open-source Webots Robotics simulator.
-To run this controller you must have a C++ compiler, as well as the latest version of webots installed.
+To run this controller you must have a C++ compiler, as well as the latest version of Webots Robotics Simulator installed.
 
 Current progress:
 - All robot hardware (motors and sensors) have been initialized and configured.
