@@ -1,7 +1,7 @@
 // File: vacuum_cleaning_robot_controller.cpp
-// Date: 03/03/2021
+// Date: 16/03/2021
 // Description: A controller for the iRobot Create to kickstart our TSE project.
-// Author: Bryan Higgins
+// Author: TSE G1
 
 #include <webots/Robot.hpp>
 #include <webots/DistanceSensor.hpp>
