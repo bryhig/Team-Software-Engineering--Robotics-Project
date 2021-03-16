@@ -10,19 +10,17 @@
 #include <webots/Receiver.hpp>
 #include <webots/TouchSensor.hpp>
 #include <webots/Motor.hpp>
+#include <math.h>
+#include <ctime>
 
 #define TIME_STEP 64
-#define MAX_SPEED 6.0
+#define MAX_SPEED 8.0
 #define HALF_SPEED 3.0
 #define NULL_SPEED 0.0
 #define WHEEL_RADIUS 0.031
 #define AXLE_LENGTH 0.271756
 
 using namespace webots;
-
-
-
-
 
 //Obstacle detection functions that check to see if sensors are at threshold value. BH
 //collision and cliff functions work for all directions. Change function inputs for different directions. BH
@@ -38,19 +36,35 @@ bool cliff(double dsValue1, double dsValue2)
  return cliff;
 }
 
+//Generates a random double. Will be used to multiply Pi to generate angle for robot to trun. BH
+double randomDouble(double min, double max){
+ return (max - min) * ( (double)rand() / (double)RAND_MAX ) + min;
+}
 
-// Not in use now, will be usable after code is restructured.
+//Makes robot wait before making next move. BH
+void wait(Robot* robot, double sec){
+ double startTime = robot->getTime();
+   do {
+    if (robot->step(TIME_STEP) == -1){
+    delete robot;
+    exit(EXIT_SUCCESS);
+    }
+  } while (startTime + sec > robot->getTime());
+}
 
-void go_forward(Motor *left, Motor *right, double speed){
+//Makes robot drive forward. BH
+void goForward(Motor *left, Motor *right, double speed){
   left->setVelocity(speed);
   right->setVelocity(speed);
 }
 
-void go_backward(Motor *left, Motor *right, double speed){
+//Makes robot drive backward. BH
+void goBackward(Motor *left, Motor *right, double speed){
   left->setVelocity(-speed);
   right->setVelocity(-speed);
 }
 
+//Makes robot stop. BH
 void stop(Motor *left, Motor *right){
   left->setVelocity(NULL_SPEED);
   right->setVelocity(NULL_SPEED);
@@ -99,11 +113,10 @@ void turn(Robot *robot, Motor *left, Motor *right, PositionSensor *posSensors[2]
     // work out the current orientation by shifting the circle by the distance moved. DC
     // Circle diameter = axle length. DC
     orientation = direction * (dl-dr) / AXLE_LENGTH;
-    std::cout << direction*angle << std::endl;
-    std::cout << orientation << std::endl;
+    //std::cout << direction*angle << std::endl;
+    //std::cout << orientation << std::endl;
     step(robot);
   } while(orientation < direction * angle);
-  std::cout << "pls break free" << std::endl;
   stop(left, right);
   step(robot);
 }
@@ -157,6 +170,8 @@ int main(int argc, char **argv) {
   leftMotor->setVelocity(0.0);
   rightMotor->setVelocity(0.0);
   
+  srand(time(0));
+  
   
 
   // Main loop:
@@ -177,23 +192,12 @@ int main(int argc, char **argv) {
     tsValues[i] = ts[i]->getValue();
    }
    
-   //Read position sensor outputs. BH
+   //Read position sensor outputs. Not needed here yet. BH
    double psValues[2];
    for(int i = 0; i < 2; i++)
    {
     psValues[i] = ps[i]->getValue();
    }
-   
-   // Read the position sensors. DC
-   printf("%lf on the left, and %lf on the right\n", ps[0]->getValue(), ps[1]->getValue());
-   
-   // Tests for each movement function. DC
-   //go_forward(leftMotor, rightMotor, MAX_SPEED);
-   //go_backward(leftMotor, rightMotor, HALF_SPEED);
-   
-   //turns the robot 90 degrees before turning back, using radians. EB
-   turn(robot, leftMotor, rightMotor, ps, (M_PI/180)*90);
-   turn(robot, leftMotor, rightMotor, ps, (M_PI/180)*-90);
    
    // Obstacle detection functions called. Input parameters specify direction for collision and cliff. BH
    bool isLeftCollision = collision(tsValues[0]);
@@ -202,9 +206,32 @@ int main(int argc, char **argv) {
    bool isCliffLeft = cliff(dsValues[0], dsValues[1]);
    bool isCliffRight = cliff(dsValues[3], dsValues[2]);
    bool isCliffFront = cliff(dsValues[1], dsValues[2]);
-  
-   // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
-   while (r->getQueueLength() > 0){r->nextPacket();}
+   
+   //Very basic implementation of obstacle avoidance algorithm. Matches existing algorithms. BH
+   //Robot turns by a random multiple of Pi if it encounters an obstacle. BH
+            if (isThereWall) {
+                printf("Virtual wall detected \n");
+                turn(robot, leftMotor, rightMotor, ps, M_PI);
+            }
+            else if (isLeftCollision || isCliffLeft) {
+                printf("Cliff or collision to the left \n");
+                goBackward(leftMotor, rightMotor, HALF_SPEED);
+                wait(robot, 0.5);
+                turn(robot, leftMotor, rightMotor, ps, (-M_PI * randomDouble(0, 1)));
+            }
+            else if (isRightCollision || isCliffRight || isCliffFront) {
+                printf("Cliff or collision to the right \n");
+                goBackward(leftMotor, rightMotor, HALF_SPEED);
+                wait(robot, 0.5);
+                turn(robot, leftMotor, rightMotor, ps, (M_PI * randomDouble(0, 1)));
+            }
+            else {
+                goForward(leftMotor, rightMotor, MAX_SPEED);
+                // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
+                while (r->getQueueLength() > 0) {r->nextPacket();}
+                step(robot);
+
+            }
    
    
   }
