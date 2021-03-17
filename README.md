@@ -11,6 +11,7 @@ Current progress:
 - Obstacle detection code using the information obtained from these sensors has been written.
 - A basic obstacle avoidance algorithm has been implemented.
 - Robot has full functionality to move around a space cleaning.
+
 Coming up:
 - More efficient implementations of obstacle avoidance algorithms so the robot can clean a room to an optimal extent.
 
