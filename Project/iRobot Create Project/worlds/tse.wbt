@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.3016823770026835 0.9280389558982332 0.21847526116548815 4.930507359882761
-  position -2.704099831785117 0.9317417773057926 0.5116494311343442
+  orientation -0.24908019307561077 0.6667915912752268 0.7023873797428789 2.668528206039251
+  position 0.5061856955039878 6.856827533143151 -0.06350027791305779
 }
 TexturedBackground {
 }
@@ -18,18 +18,52 @@ Desk {
 }
 TexturedBackgroundLight {
 }
-RectangleArena {
-  translation 0.0308936 0 0.064373
-  floorSize 4 4
-  floorAppearance Parquetry {
-    type "light strip"
-  }
-  wallHeight 0.05
-}
-Create {
+DEF iRobotCreate Create {
   translation 0.380398 0.0442049 -0.939413
   rotation -0.0006999986569880018 0.9999995099821598 0.0007000266569742814 -1.5707953071795862
   controller "vacuum_cleaning_robot_controller"
+}
+Robot {
+  children [
+    Display {
+      translation 0 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColorMap ImageTexture {
+              url [
+                "textures/dirty.jpg"
+              ]
+            }
+            transparency 0.9
+            roughness 0.5
+            metalness 0
+          }
+          geometry Plane {
+            size 9.9 9.9
+          }
+        }
+      ]
+      width 512
+      height 512
+    }
+    Shape {
+      appearance Parquetry {
+        textureTransform TextureTransform {
+          scale 7 7
+        }
+      }
+      geometry Plane {
+        size 10 10
+      }
+    }
+  ]
+  boundingObject Plane {
+    size 9.9 9.9
+  }
+  locked TRUE
+  controller "ground"
+  supervisor TRUE
 }
 Laptop {
   translation -1.2624694361209 0.7088616216430695 -1.2948700000704716
