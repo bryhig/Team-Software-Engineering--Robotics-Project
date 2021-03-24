@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.24908019307561077 0.6667915912752268 0.7023873797428789 2.668528206039251
-  position 0.5061856955039878 6.856827533143151 -0.06350027791305779
+  position 0.4909494919318486 7.422796405535395 -0.03950782266478061
 }
 TexturedBackground {
 }
@@ -62,7 +62,7 @@ Robot {
     size 9.9 9.9
   }
   locked TRUE
-  controller "ground"
+  controller "dust_remove"
   supervisor TRUE
 }
 Laptop {
