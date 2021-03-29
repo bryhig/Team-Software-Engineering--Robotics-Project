@@ -1,20 +1,23 @@
 #VRML_SIM R2021a utf8
 WorldInfo {
+  optimalThreadCount 4
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.24908019307561077 0.6667915912752268 0.7023873797428789 2.668528206039251
-  position 0.4909494919318486 7.422796405535395 -0.03950782266478061
+  orientation 1 0 0 4.71238898038469
+  position -2.160359724931533e-15 15.187348686342052 -1.2646008145940683e-15
+  follow "Create"
+  followType "None"
 }
 TexturedBackground {
 }
 OfficeChair {
-  translation -0.78062100052001 -0.00012887542889900017 -1.280720000089447
-  rotation 6.27862398839991e-05 0.9999999960000564 6.370066894984307e-05 -1.5707953112488815
+  translation 1.57938 -0.000426751 -1.98072
+  rotation 6.324339987351522e-05 0.9999999980000318 4.5721399908558654e-07 3.14159
 }
 Desk {
-  translation -1.36171 -3.9968e-15 -1.31706
-  rotation 0 -0.9999999999999999 0 1.5707953071795862
+  translation 1.54829 -3.9968e-15 -2.53706
+  rotation 0 1 0 3.14159
 }
 TexturedBackgroundLight {
 }
@@ -40,7 +43,7 @@ Robot {
             metalness 0
           }
           geometry Plane {
-            size 9.9 9.9
+            size 6 6
           }
         }
       ]
@@ -54,25 +57,90 @@ Robot {
         }
       }
       geometry Plane {
-        size 10 10
+        size 6 6
       }
     }
   ]
   boundingObject Plane {
-    size 9.9 9.9
+    size 6 6
   }
   locked TRUE
   controller "dust_remove"
   supervisor TRUE
 }
-Laptop {
-  translation -1.2624694361209 0.7088616216430695 -1.2948700000704716
-  rotation 0.0013022587631213545 -0.9999983001637126 0.0013052937597247706 1.570801707334026
+PortraitPainting {
+  translation 2.94 1.275 -0.560003
+  rotation 0 1 0 -1.5707953071795862
 }
-Bed {
-  translation 0.904877 0 1.08687
+LandscapePainting {
+  translation 1.6 1.4 -2.95
+}
+DesktopComputer {
+  translation 1.17 0 -2.49
+}
+Monitor {
+  translation 1.19 0.71 -2.57
+  rotation 0 1 0 -2.8797953071795863
+}
+Monitor {
+  translation 1.68993 0.71 -2.63278
+  rotation 0 1 0 3.14159
+  name "monitor(1)"
 }
 Cabinet {
-  translation -1.48646 0 1.86564
+  translation -1.48646 0 2.94564
   rotation 0 1 0 3.14159
+}
+Laptop {
+  translation 1.28985 0.635525 1.11513
+  rotation -0.001301799618054896 0.9999977066029037 -0.001700619501042032 -1.3090053071795866
+}
+Bed {
+  translation 1.85488 0 1.08687
+}
+Solid {
+  children [
+    DEF WallStruc Shape {
+      appearance PBRAppearance {
+        baseColor 0.890196 0.843137 0.831373
+        roughness 1
+        metalness 0
+      }
+      geometry Extrusion {
+        crossSection [
+          1 1
+          1 -1
+          -1 -1
+          -1 1
+          -0.99 1
+          -0.99 -0.99
+          0.99 -0.99
+          0.99 0.99
+          -0.9899 0.99
+          -0.9899 1
+          1 1
+        ]
+        spine [
+          0 0 0
+          0 2 0
+        ]
+        scale [
+          3 3
+        ]
+      }
+    }
+  ]
+  name "walls"
+  boundingObject USE WallStruc
+}
+Sofa {
+  translation -0.52 0 -1.03
+  rotation 0 1 0 3.14159
+}
+Television {
+  translation -2.93 1.26 -1.10999
+  rotation 0 1 0 1.5708
+}
+Radiator {
+  translation -2.88 0.36 1.58
 }
