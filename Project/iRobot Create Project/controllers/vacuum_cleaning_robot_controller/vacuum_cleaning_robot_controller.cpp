@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
   
   //Initializing distance sensors e.g. cliff sensors. BH
   DistanceSensor *ds[4];
-  std::string dsNames[4] = {"cliff_left", "cliff_front_left", "cliff_front_right", "cliff_left"};
+  std::string dsNames[4] = {"cliff_left", "cliff_front_left", "cliff_front_right", "cliff_right"};
   for(int i = 0; i < 4; i++)
   {
    ds[i] = robot->getDistanceSensor(dsNames[i]);
