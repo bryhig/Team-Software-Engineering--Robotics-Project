@@ -13,8 +13,8 @@
 #define Z 2
 
 // Size of the floor. BH
-#define GROUND_X 9.9
-#define GROUND_Z 9.9
+#define GROUND_X 6
+#define GROUND_Z 6
 
 
 using namespace webots;
