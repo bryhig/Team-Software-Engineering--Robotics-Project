@@ -227,11 +227,11 @@ int main(int argc, char **argv) {
             }
             else {
                 goForward(leftMotor, rightMotor, MAX_SPEED);
-                // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
-                while (r->getQueueLength() > 0) {r->nextPacket();}
-                step(robot);
-
             }
+            
+    // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
+    while (r->getQueueLength() > 0) {r->nextPacket();}
+    step(robot);
    
    
   }
