@@ -14,7 +14,7 @@
 #include <ctime>
 
 #define TIME_STEP 64
-#define MAX_SPEED 8.0
+#define MAX_SPEED 16.0
 #define HALF_SPEED 3.0
 #define NULL_SPEED 0.0
 #define WHEEL_RADIUS 0.031
@@ -71,7 +71,6 @@ void stop(Motor *left, Motor *right){
 }
 
 // Partially pulled from the webots robot, rebuilt for C++. DC
-// Needs step functions in order to not crash webots. DC
 
 //step code terminates robot controller if illegal time step in simulation. EB
 void step(Robot *robot){
@@ -92,12 +91,10 @@ void turn(Robot *robot, Motor *left, Motor *right, PositionSensor *posSensors[2]
   
   // If the angle is negative, turn left, else turn right. DC
   double direction = (angle < 0.0) ? -1.0 : 1.0;
-  //std::cout << "works1" << std::endl;
   // Set the motors going - if left, set the left motor forward and right backward,
   // otherwise do the opposite. DC
   left->setVelocity(direction * HALF_SPEED);
   right->setVelocity(-direction * HALF_SPEED);
-  //std::cout << "works2" << std::endl;
   
   //until this variable == the angle entered, keep rotating - DC
   double orientation;
@@ -105,16 +102,14 @@ void turn(Robot *robot, Motor *left, Motor *right, PositionSensor *posSensors[2]
     // Grab the current positions of the wheels, DC
     double l = posSensors[0]->getValue() - leftOffset;
     double r = posSensors[1]->getValue() - rightOffset;
-    //std::cout << "worksL1" << std::endl;
     // Work out the distance we move based on the radius of the wheels, DC
     double dl = l * WHEEL_RADIUS;
     double dr = r * WHEEL_RADIUS;
-    //std::cout << "worksL2" << std::endl;
     // work out the current orientation by shifting the circle by the distance moved. DC
     // Circle diameter = axle length. DC
     orientation = direction * (dl-dr) / AXLE_LENGTH;
-    //std::cout << direction*angle << std::endl;
-    //std::cout << orientation << std::endl;
+    //printf("%f = %f * (%f - %f) / %f\n", orientation, direction, dl, dr, AXLE_LENGTH);
+    printf("Turned %f degrees...\n", orientation);
     step(robot);
   } while(orientation < direction * angle);
   stop(left, right);
@@ -126,6 +121,7 @@ int main(int argc, char **argv) {
   
   // Create the Robot instance. BH
   Robot *robot = new Robot();
+  
   
   //Initializing distance sensors e.g. cliff sensors. BH
   DistanceSensor *ds[4];
@@ -172,7 +168,8 @@ int main(int argc, char **argv) {
   
   srand(time(0));
   
-  
+  int timePassed = 0;
+  bool zig = false;
 
   // Main loop:
   //Avoidance algorithms go in here. BH
@@ -207,9 +204,48 @@ int main(int argc, char **argv) {
    bool isCliffRight = cliff(dsValues[3], dsValues[2]);
    bool isCliffFront = cliff(dsValues[1], dsValues[2]);
    
+   // Alternate prototype implementation of obstacle avoidance, built in Pseudocode by DK and
+   // converted to C++ by DC.
+   
+   if (isLeftCollision || isCliffLeft) {
+     printf("Turning left...");
+     goBackward(leftMotor, rightMotor, HALF_SPEED);
+     wait(robot, 0.5);
+     turn(robot, leftMotor, rightMotor, ps, (-M_PI * 1));
+     timePassed = 0;
+   }
+   else if (isRightCollision || isCliffRight || isCliffFront) {
+     printf("Turning right...");
+     goBackward(leftMotor, rightMotor, HALF_SPEED);
+     wait(robot, 0.5);
+     turn(robot, leftMotor, rightMotor, ps, (M_PI * 1));
+     timePassed = 0;
+   }
+   // Time is measured in ticks for ease, hence 30 instead of 3. 
+   else if (timePassed >= 20){
+     if(zig){
+       // Current issue is with the turn function - it's actually not accurately
+       // turning by the number of degrees specificed, making it hard to make it turn by specific amounts.
+       turn(robot, leftMotor, rightMotor, ps, (-M_PI * 1));
+       zig = false;
+       timePassed = 0;
+     }
+     else{
+       turn(robot, leftMotor, rightMotor, ps, (M_PI * 1));
+       zig = true;
+       timePassed = 0;
+     }
+   }
+   else {
+     goForward(leftMotor, rightMotor, MAX_SPEED);
+     timePassed++;
+   }
+   printf("Seconds passed: %d\n", timePassed/10);
+   
+      
    //Very basic implementation of obstacle avoidance algorithm. Matches existing algorithms. BH
    //Robot turns by a random multiple of Pi if it encounters an obstacle. BH
-            if (isThereWall) {
+            /*if (isThereWall) {
                 printf("Virtual wall detected \n");
                 turn(robot, leftMotor, rightMotor, ps, M_PI);
             }
@@ -227,11 +263,14 @@ int main(int argc, char **argv) {
             }
             else {
                 goForward(leftMotor, rightMotor, MAX_SPEED);
-            }
+            }*/
+            
             
     // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
     while (r->getQueueLength() > 0) {r->nextPacket();}
     step(robot);
+    
+    
    
    
   }
