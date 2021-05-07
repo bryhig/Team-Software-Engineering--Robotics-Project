@@ -1,21 +1,9 @@
-# Team-Software-Engineering--Robotics-Project
-Team Software Engineering - Robotics G1 project
-Last Updated: 24/03/2021
-
-A software engineering project to create an efficient obstacle avoidance algorithm('s) robot controller, in C++, for the iRobot Create. We are using the open-source Webots Robotics simulator to do this.
-
-To run this controller you must have a C++ compiler, as well as the latest version of Webots Robotics Simulator installed.
-
-Current progress:
-- All robot hardware (motors and sensors) have been initialized and configured.
-- Obstacle detection code using the information obtained from these sensors has been written.
-- A basic obstacle avoidance algorithm has been implemented.
-- Robot has full functionality to move around a space cleaning.
-- A supervisor controller has been created to make the iRobot Create remove a dust texture from floor, to appear as if its cleaning.
-
-Coming up:
-- More efficient implementations of obstacle avoidance algorithms so the robot can clean a room to an optimal extent.
-
-Multiple identical commits on 02/03/2021 were due to bad internet connection. 
-
-TSE G1 Group
+# Instructions for use
+Instructions
+1. Install the latest version of Webots from https://cyberbotics.com/#download
+2. Download the project from this GitHub repository ( https://github.com/bryhig/tse-g1/ ) as a .zip folder by clicking the green download code button.
+3. Once downloaded, extract this .zip folder.
+4. Enter the extracted file, and enter the folder named 'Project'.
+5. Once in this file there should be two folders, one named 'Our implementation' and one named 'Replication of existing implementation'. Choose which one you would like to view (or both at the same time to compare the two). 
+6. Enter the chosen folder, then enter the folder named 'worlds'. Once in the 'worlds' folder open the file named 'tse.wbt'.
+7. When this file is opened, it will open Webots and load into the simulation we have created. If the webots 'play' button doesnt automatically start itself, please click it. Once playing, you will be able to see our robot running our source code, and the supervisor controller removing the dust texture. 
