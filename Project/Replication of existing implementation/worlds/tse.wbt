@@ -1,0 +1,146 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  optimalThreadCount 4
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 1 0 0 4.71238898038469
+  position -2.160359724931533e-15 15.187348686342052 -1.2646008145940683e-15
+  follow "Create"
+  followType "None"
+}
+TexturedBackground {
+}
+OfficeChair {
+  translation 1.57938 -0.000426751 -1.98072
+  rotation 6.324339987351522e-05 0.9999999980000318 4.5721399908558654e-07 3.14159
+}
+Desk {
+  translation 1.54829 -3.9968e-15 -2.53706
+  rotation 0 1 0 3.14159
+}
+TexturedBackgroundLight {
+}
+DEF iRobotCreate Create {
+  translation 0.380398 0.0442049 -0.939413
+  rotation -0.0006999986569880018 0.9999995099821598 0.0007000266569742814 -1.5707953071795862
+  controller "vacuum_cleaning_robot_controller"
+}
+Robot {
+  children [
+    Display {
+      translation 0 0.01 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColorMap ImageTexture {
+              url [
+                "textures/dirty.jpg"
+              ]
+            }
+            transparency 0.9
+            roughness 0.5
+            metalness 0
+          }
+          geometry Plane {
+            size 6 6
+          }
+        }
+      ]
+      width 512
+      height 512
+    }
+    Shape {
+      appearance Parquetry {
+        textureTransform TextureTransform {
+          scale 7 7
+        }
+      }
+      geometry Plane {
+        size 6 6
+      }
+    }
+  ]
+  boundingObject Plane {
+    size 6 6
+  }
+  locked TRUE
+  controller "dust_remove"
+  supervisor TRUE
+}
+PortraitPainting {
+  translation 2.94 1.275 -0.560003
+  rotation 0 1 0 -1.5707953071795862
+}
+LandscapePainting {
+  translation 1.6 1.4 -2.95
+}
+DesktopComputer {
+  translation 1.17 0 -2.49
+}
+Monitor {
+  translation 1.19 0.71 -2.57
+  rotation 0 1 0 -2.8797953071795863
+}
+Monitor {
+  translation 1.68993 0.71 -2.63278
+  rotation 0 1 0 3.14159
+  name "monitor(1)"
+}
+Cabinet {
+  translation -1.48646 0 2.94564
+  rotation 0 1 0 3.14159
+}
+Laptop {
+  translation 1.28985 0.635525 1.11513
+  rotation -0.001301799618054896 0.9999977066029037 -0.001700619501042032 -1.3090053071795866
+}
+Bed {
+  translation 1.85488 0 1.08687
+}
+Solid {
+  children [
+    DEF WallStruc Shape {
+      appearance PBRAppearance {
+        baseColor 0.890196 0.843137 0.831373
+        roughness 1
+        metalness 0
+      }
+      geometry Extrusion {
+        crossSection [
+          1 1
+          1 -1
+          -1 -1
+          -1 1
+          -0.99 1
+          -0.99 -0.99
+          0.99 -0.99
+          0.99 0.99
+          -0.9899 0.99
+          -0.9899 1
+          1 1
+        ]
+        spine [
+          0 0 0
+          0 2 0
+        ]
+        scale [
+          3 3
+        ]
+      }
+    }
+  ]
+  name "walls"
+  boundingObject USE WallStruc
+}
+Sofa {
+  translation -0.52 0 -1.03
+  rotation 0 1 0 3.14159
+}
+Television {
+  translation -2.93 1.26 -1.10999
+  rotation 0 1 0 1.5708
+}
+Radiator {
+  translation -2.88 0.36 1.58
+}
