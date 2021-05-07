@@ -1,6 +1,6 @@
 // File: vacuum_cleaning_robot_controller.cpp
-// Date: 16/03/2021
-// Description: A controller for the iRobot Create to kickstart our TSE project.
+// Date: 07/05/2021
+// Description: Robot controller using our replica of existing obstacle avoidance algorithm in Webots.
 // Author: TSE G1
 
 #include <webots/Robot.hpp>
@@ -81,6 +81,7 @@ void step(Robot *robot){
 }
 
 
+// Turning function. BH
 void turn(Robot *robot, Motor *left, Motor *right, PositionSensor *posSensors[2], double angle){
   stop(left, right);
   // Grab the current positions of the wheels (at start of turning) to apply when working out how far we've turned. DC
@@ -168,9 +169,6 @@ int main(int argc, char **argv) {
   
   srand(time(0));
   
-  int timePassed = 0;
-  bool zig = false;
-
   // Main loop:
   //Avoidance algorithms go in here. BH
   while (robot->step(TIME_STEP) != -1)

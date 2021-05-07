@@ -1,6 +1,6 @@
 // File: vacuum_cleaning_robot_controller.cpp
-// Date: 16/03/2021
-// Description: A controller for the iRobot Create to kickstart our TSE project.
+// Date: 07/05/2021
+// Description: A controller using our 'Zig Zag' algorithm on the iRobot Create.
 // Author: TSE G1
 
 #include <webots/Robot.hpp>
@@ -241,29 +241,6 @@ int main(int argc, char **argv) {
      timePassed++;
    }
    printf("Seconds passed: %d\n", timePassed/10);
-   
-      
-   //Very basic implementation of obstacle avoidance algorithm. Matches existing algorithms. BH
-   //Robot turns by a random multiple of Pi if it encounters an obstacle. BH
-            /*if (isThereWall) {
-                printf("Virtual wall detected \n");
-                turn(robot, leftMotor, rightMotor, ps, M_PI);
-            }
-            else if (isLeftCollision || isCliffLeft) {
-                printf("Cliff or collision to the left \n");
-                goBackward(leftMotor, rightMotor, HALF_SPEED);
-                wait(robot, 0.5);
-                turn(robot, leftMotor, rightMotor, ps, (-M_PI * randomDouble(0, 1)));
-            }
-            else if (isRightCollision || isCliffRight || isCliffFront) {
-                printf("Cliff or collision to the right \n");
-                goBackward(leftMotor, rightMotor, HALF_SPEED);
-                wait(robot, 0.5);
-                turn(robot, leftMotor, rightMotor, ps, (M_PI * randomDouble(0, 1)));
-            }
-            else {
-                goForward(leftMotor, rightMotor, MAX_SPEED);
-            }*/
             
             
     // Flush IR receiver. MUST STAY AT END OF LOOP. BH.
